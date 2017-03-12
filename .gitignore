@@ -27,3 +27,10 @@
 *.exe
 *.out
 *.app
+
+# cmake & make
+cmake-*
+bin
+
+#clion
+.idea
