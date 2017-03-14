@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include "helper.h"
 
 using namespace std;
 
@@ -34,5 +35,11 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     };
 
-    cout << useTest<<endl;
+    vector<string> ls = get_file_list(useTest);
+    for (string &s: ls) {
+        cout << s << endl;
+    }
+
+    string a = "dataset/train/a08_s01_e01_skeleton_proj.txt";
+    get_joint_pos_of_instance(a);
 }
