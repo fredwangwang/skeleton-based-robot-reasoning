@@ -32,19 +32,19 @@ vector<string> get_file_list(bool useTest) {
     return list;
 }
 
+// This method assumes that there are 20 joints per frame
+// PRETTY BAD ASSUMPTION, BUT IT WORKS...
 jposes_of_frame get_joint_pos_of_frame(ifstream &fin) {
     jposes_of_frame result;
-    int cur_frame = fin.peek();
-    int frame, joint;
+    int frame_id, joint_id;
     float x, y, z;
-    while (fin.peek() == cur_frame) {
-        fin >> frame >> joint;
-        fin >> x >> y >> z;
-        if (fin.good()) {
-            cout << "x, y, x: " << x << "\t" << y << "\t" << z << endl;
-            result.push_back(joint_pos(x, y, z));
-        } else break;
+
+    for (int i = 0; i < 20; i++) {
+        fin >> frame_id >> joint_id >> x >> y >> z;
+        //cout << frame_id << "  " << joint_id << "  " << x << "  " << y << "  " << z << endl;
+        result.push_back(joint_pos(x, y, z));
     }
+
     return result;
 }
 
@@ -55,8 +55,14 @@ jposes_of_instance get_joint_pos_of_instance(string &filename) {
         cerr << "Error opening " << filename << endl;
         exit(EXIT_FAILURE);
     }
-    while (!fin.eof()) {
+
+    // this loop always read one more because of istream.good()
+    while (fin) {
         result.push_back(get_joint_pos_of_frame(fin));
     }
+
+    // so remove one
+    result.pop_back();
+
     return result;
 }

@@ -3,7 +3,9 @@
 //
 
 #include <iostream>
+#include <cmath>
 #include "helper.h"
+#include "RAD.h"
 
 using namespace std;
 
@@ -18,7 +20,6 @@ void print_usage() {
 }
 
 int main(int argc, char **argv) {
-    cout << "Hello World" << endl;
     // parse flag and print out usage"
     if (argc != 2) {
         print_usage();
@@ -36,10 +37,12 @@ int main(int argc, char **argv) {
     };
 
     vector<string> ls = get_file_list(useTest);
-    for (string &s: ls) {
-        cout << s << endl;
-    }
+    RAD rad(ls, useTest);
+    rad.start();
 
-    string a = "dataset/train/a08_s01_e01_skeleton_proj.txt";
-    get_joint_pos_of_instance(a);
+//    cout << atan2(1,1)*180/3.141592653<<endl;
+//    cout << atan2(1,-1)*180/3.141592653<<endl;
+//    cout << atan2(-1,-1)*180/3.141592653<<endl;
+//    cout << atan2(-1,1)*180/3.141592653<<endl;
+
 }
