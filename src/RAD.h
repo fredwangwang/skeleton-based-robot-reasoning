@@ -33,6 +33,11 @@ private:
 
     void calculate();
 
+    void write_to_file();
+
+    std::vector<std::vector<double >> putting_N_bins(std::vector<std::vector<double>> &distances);
+    std::vector<std::vector<double >> putting_M_bins(std::vector<std::vector<double>> &angles);
+
     std::vector<std::string> file_list;
     std::string out_file_name;
     std::ostringstream os_buff;
