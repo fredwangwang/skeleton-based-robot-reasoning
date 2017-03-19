@@ -9,7 +9,9 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include "helper.h"
+#include "skeleton_model.h"
+
+using namespace std;
 
 // TO CREATE A STAR REPRESENTATION
 // THERE ARE 5 POINTS REQUIRED, THEY ARE (OFF BY ONE MODIFIED):
@@ -20,16 +22,14 @@
 // RIGHT FOOT:  15
 // LEFT FOOT:   19
 
-class RAD {
+class RAD : public skeleton_model {
 public:
-    RAD(std::vector<std::string>, bool);
+    RAD(bool flag);
 
     void start();
 
 private:
-    void load_instances();
-
-    void calculate_single_frame(jposes_of_frame &);
+    void calculate_single_frame(positions_of_frame &);
 
     void calculate();
 
@@ -38,11 +38,8 @@ private:
     std::vector<std::vector<double >> putting_N_bins(std::vector<std::vector<double>> &distances);
     std::vector<std::vector<double >> putting_M_bins(std::vector<std::vector<double>> &angles);
 
-    std::vector<std::string> file_list;
-    std::string out_file_name;
     std::ostringstream os_buff;
 
-    std::vector<jposes_of_instance> jposes_instances;
     std::vector<std::vector<double>> distances;
     std::vector<std::vector<double>> angles;
 

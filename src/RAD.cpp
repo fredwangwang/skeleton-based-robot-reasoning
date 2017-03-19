@@ -8,35 +8,28 @@
 
 using namespace std;
 
-RAD::RAD(vector<string> file_list, bool useTest) {
-    this->file_list = file_list;
-    if (useTest) out_file_name = "rad_d1.t";
-    else out_file_name = "rad_d1";
-
+RAD::RAD(bool flag) {
+    set_flag(flag);
     distances.resize(5);
     angles.resize(5);
+
+    get_file_list();
+    load_instances();
 }
 
 void RAD::start() {
+    cout << "start to calculate" << endl;
     os_buff.clear();
-    load_instances();
+    
     calculate();
     write_to_file();
 }
 
-void RAD::load_instances() {
-    cout << "Load all files" << endl;
-    for (string &s: file_list) {
-        jposes_instances.push_back(get_joint_pos_of_instance(s));
-    }
-    cout << "Finish loading " << jposes_instances.size() << " instances " << endl;
-}
-
-double dist(joint_pos &a, joint_pos &b) {
+double dist(position &a, position &b) {
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
 }
 
-double angle(joint_pos &a, joint_pos &b) {
+double angle(position &a, position &b) {
     double x_dot_y = a.x * b.x + a.y * b.y + a.z * b.z;
     double x_norm = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
     double y_norm = sqrt(pow(b.x, 2) + pow(b.y, 2) + pow(b.z, 2));
@@ -45,7 +38,7 @@ double angle(joint_pos &a, joint_pos &b) {
 }
 
 
-double relative_angle_respected_to_center(joint_pos &a, joint_pos &b, joint_pos &center) {
+double relative_angle_respected_to_center(position &a, position &b, position &center) {
     double angle_a_to_center = angle(a, center);
     double angle_b_to_center = angle(b, center);
     return abs(angle_a_to_center - angle_b_to_center);
@@ -60,7 +53,7 @@ double relative_angle_respected_to_center(joint_pos &a, joint_pos &b, joint_pos 
  *
  * @param frame     a single frame data
  */
-void RAD::calculate_single_frame(jposes_of_frame &frame) {
+void RAD::calculate_single_frame(positions_of_frame &frame) {
     distances[0].push_back(dist(frame[HEAD], frame[CENTER]));
     distances[1].push_back(dist(frame[RIGHT_HAND], frame[CENTER]));
     distances[2].push_back(dist(frame[LEFT_HAND], frame[CENTER]));
@@ -85,7 +78,7 @@ void WriteOut(vector<double> &obj) {
 
 void RAD::calculate() {
     // part pesudocode
-    for (jposes_of_instance &ins:jposes_instances) { // for each instance
+    for (positions_of_instance &ins:positions_instances) { // for each instance
         distances.clear();
         angles.clear();
         distances.resize(5);
@@ -93,7 +86,7 @@ void RAD::calculate() {
 
         double min_dist, max_dist, min_angle, max_angle;
         size_t num_frame = ins.size();
-        for (jposes_of_frame &frame: ins) {
+        for (positions_of_frame &frame: ins) {
             calculate_single_frame(frame);
         }
         //cout << "computed for one instance" << endl;
