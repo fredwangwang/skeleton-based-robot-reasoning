@@ -9,7 +9,10 @@
 using namespace std;
 
 RAD::RAD(bool flag) {
-    set_flag(flag);
+    use_test_ = flag;
+    if (flag) out_file_name_ = "rad_d1.t";
+    else out_file_name_ = "rad_d1";
+
     distances.resize(5);
     angles.resize(5);
 
@@ -18,15 +21,11 @@ RAD::RAD(bool flag) {
 }
 
 void RAD::start() {
-    cout << "start to calculate" << endl;
-    os_buff.clear();
+    cout << "start calculating RAD" << endl;
+    os_buff_.clear();
     
     calculate();
     write_to_file();
-}
-
-double dist(position &a, position &b) {
-    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
 }
 
 double angle(position &a, position &b) {
@@ -54,11 +53,11 @@ double relative_angle_respected_to_center(position &a, position &b, position &ce
  * @param frame     a single frame data
  */
 void RAD::calculate_single_frame(positions_of_frame &frame) {
-    distances[0].push_back(dist(frame[HEAD], frame[HIP_CENTER]));
-    distances[1].push_back(dist(frame[HAND_RIGHT], frame[HIP_CENTER]));
-    distances[2].push_back(dist(frame[HAND_LEFT], frame[HIP_CENTER]));
-    distances[3].push_back(dist(frame[FOOT_RIGHT], frame[HIP_CENTER]));
-    distances[4].push_back(dist(frame[FOOT_LEFT], frame[HIP_CENTER]));
+    distances[0].push_back(dist_between(frame[HEAD], frame[HIP_CENTER]));
+    distances[1].push_back(dist_between(frame[HAND_RIGHT], frame[HIP_CENTER]));
+    distances[2].push_back(dist_between(frame[HAND_LEFT], frame[HIP_CENTER]));
+    distances[3].push_back(dist_between(frame[FOOT_RIGHT], frame[HIP_CENTER]));
+    distances[4].push_back(dist_between(frame[FOOT_LEFT], frame[HIP_CENTER]));
     angles[0].push_back(relative_angle_respected_to_center(frame[HAND_RIGHT], frame[HEAD], frame[HIP_CENTER]));
     angles[1].push_back(relative_angle_respected_to_center(frame[HEAD], frame[HAND_LEFT], frame[HIP_CENTER]));
     angles[2].push_back(relative_angle_respected_to_center(frame[HAND_LEFT], frame[FOOT_LEFT], frame[HIP_CENTER]));
@@ -104,16 +103,16 @@ void RAD::calculate() {
         for (vector<double> &oneBin: Nbins)
             for (double &one: oneBin) {
                 one /= num_frame;
-                os_buff << one << " ";
+                os_buff_ << one << " ";
             }
 
         for (vector<double> &oneBin: Mbins)
             for (double &one: oneBin) {
                 one /= num_frame;
-                os_buff << one << " ";
+                os_buff_ << one << " ";
             }
 
-        os_buff << endl;
+        os_buff_ << endl;
     }
 }
 
@@ -184,12 +183,3 @@ std::vector<std::vector<double >> RAD::putting_M_bins(std::vector<std::vector<do
     return result;
 }
 
-void RAD::write_to_file() {
-    ofstream fout(out_file_name);
-    if (!fout){
-        cerr << "What?"<<endl;
-        exit(1);
-    }
-    fout << os_buff.str();
-    fout.close();
-}

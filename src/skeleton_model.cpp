@@ -9,12 +9,6 @@ skeleton_model::skeleton_model() {}
 
 skeleton_model::~skeleton_model() {}
 
-void skeleton_model::set_flag(bool flag) {
-    use_test_ = flag;
-    if (use_test_) out_file_name = "rad_d1.t";
-    else out_file_name = "rad_d1";
-}
-
 void skeleton_model::get_file_list() {
     string dir_str;
     DIR *dir = NULL;
@@ -45,7 +39,21 @@ void skeleton_model::load_instances() {
     cout << "Finish loading " << positions_instances.size() << " instances " << endl;
 }
 
-positions_of_instance skeleton_model::get_joint_pos_of_instance(string & filename) {
+void skeleton_model::write_to_file() {
+    ofstream fout(out_file_name_);
+    if (!fout) {
+        cerr << "What?" << endl;
+        exit(EXIT_FAILURE);
+    }
+    fout << os_buff_.str();
+    fout.close();
+}
+
+double skeleton_model::dist_between(position &a, position &b) {
+    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
+}
+
+positions_of_instance skeleton_model::get_joint_pos_of_instance(string &filename) {
     positions_of_instance result;
     ifstream fin(filename);
     if (!fin) {
@@ -66,7 +74,7 @@ positions_of_instance skeleton_model::get_joint_pos_of_instance(string & filenam
 
 // This method assumes that there are 20 joints per frame
 // PRETTY BAD ASSUMPTION, BUT IT WORKS...
-positions_of_frame skeleton_model::get_joint_pos_of_frame(ifstream & fin) {
+positions_of_frame skeleton_model::get_joint_pos_of_frame(ifstream &fin) {
     positions_of_frame result;
     int frame_id, joint_id;
     float x, y, z;
