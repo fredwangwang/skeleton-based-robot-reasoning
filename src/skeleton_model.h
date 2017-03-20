@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <map>
 
 using namespace std;
 
@@ -12,13 +13,11 @@ struct position {
     float x;
     float y;
     float z;
-
     position() {
         x = 0;
         y = 0;
         z = 0;
     }
-
     position(float tx, float ty, float tz) {
         x = tx;
         y = ty;
@@ -27,8 +26,11 @@ struct position {
 };
 #endif // !_SKELETON_POSITION_
 
-typedef std::vector<position> positions_of_frame;
-typedef std::vector<positions_of_frame> positions_of_instance;
+#ifndef _SKELETON_DATA_STRUCT_
+#define _SKELETON_DATA_STRUCT_
+typedef map<size_t, position> positions_of_frame;
+typedef vector<positions_of_frame> positions_of_instance;
+#endif // !_SKELETON_DATA_STRUCT_
 
 class skeleton_model
 {
@@ -51,6 +53,27 @@ protected:
     string out_file_name;
     vector<string> file_list_;
     vector<positions_of_instance> positions_instances;
+
+    const size_t HIP_CENTER = 1;
+    const size_t SPINE = 2;
+    const size_t SHOULDER_CENTER = 3;
+    const size_t HEAD = 4;
+    const size_t SHOULDER_LEFT = 5;
+    const size_t ELBOW_LEFT = 6;
+    const size_t WRIST_LEFT = 7;
+    const size_t HAND_LEFT = 8;
+    const size_t SHOULDER_RIGHT = 9;
+    const size_t ELBOW_RIGHT = 10;
+    const size_t WRIST_RIGHT = 11;
+    const size_t HAND_RIGHT = 12;
+    const size_t HIP_LEFT = 13;
+    const size_t KNEE_LEFT = 14;
+    const size_t ANKLE_LEFT = 15;
+    const size_t FOOT_LEFT = 16;
+    const size_t HIP_RIGHT = 17;
+    const size_t KNEE_RIGHT = 18;
+    const size_t ANKLE_RIGHT = 19;
+    const size_t FOOT_RIGHT = 20;
 
 private:
     positions_of_instance get_joint_pos_of_instance(string &filename);

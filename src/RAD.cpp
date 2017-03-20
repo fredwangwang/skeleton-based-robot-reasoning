@@ -54,16 +54,16 @@ double relative_angle_respected_to_center(position &a, position &b, position &ce
  * @param frame     a single frame data
  */
 void RAD::calculate_single_frame(positions_of_frame &frame) {
-    distances[0].push_back(dist(frame[HEAD], frame[CENTER]));
-    distances[1].push_back(dist(frame[RIGHT_HAND], frame[CENTER]));
-    distances[2].push_back(dist(frame[LEFT_HAND], frame[CENTER]));
-    distances[3].push_back(dist(frame[RIGHT_FOOT], frame[CENTER]));
-    distances[4].push_back(dist(frame[LEFT_FOOT], frame[CENTER]));
-    angles[0].push_back(relative_angle_respected_to_center(frame[RIGHT_HAND], frame[HEAD], frame[CENTER]));
-    angles[1].push_back(relative_angle_respected_to_center(frame[HEAD], frame[LEFT_HAND], frame[CENTER]));
-    angles[2].push_back(relative_angle_respected_to_center(frame[LEFT_HAND], frame[LEFT_FOOT], frame[CENTER]));
-    angles[3].push_back(relative_angle_respected_to_center(frame[LEFT_FOOT], frame[RIGHT_FOOT], frame[CENTER]));
-    angles[4].push_back(relative_angle_respected_to_center(frame[RIGHT_FOOT], frame[RIGHT_HAND], frame[CENTER]));
+    distances[0].push_back(dist(frame[HEAD], frame[HIP_CENTER]));
+    distances[1].push_back(dist(frame[HAND_RIGHT], frame[HIP_CENTER]));
+    distances[2].push_back(dist(frame[HAND_LEFT], frame[HIP_CENTER]));
+    distances[3].push_back(dist(frame[FOOT_RIGHT], frame[HIP_CENTER]));
+    distances[4].push_back(dist(frame[FOOT_LEFT], frame[HIP_CENTER]));
+    angles[0].push_back(relative_angle_respected_to_center(frame[HAND_RIGHT], frame[HEAD], frame[HIP_CENTER]));
+    angles[1].push_back(relative_angle_respected_to_center(frame[HEAD], frame[HAND_LEFT], frame[HIP_CENTER]));
+    angles[2].push_back(relative_angle_respected_to_center(frame[HAND_LEFT], frame[FOOT_LEFT], frame[HIP_CENTER]));
+    angles[3].push_back(relative_angle_respected_to_center(frame[FOOT_LEFT], frame[FOOT_RIGHT], frame[HIP_CENTER]));
+    angles[4].push_back(relative_angle_respected_to_center(frame[FOOT_RIGHT], frame[HAND_RIGHT], frame[HIP_CENTER]));
 }
 
 void WriteOut(vector<double> &obj) {

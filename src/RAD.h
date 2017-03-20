@@ -43,12 +43,6 @@ private:
     std::vector<std::vector<double>> distances;
     std::vector<std::vector<double>> angles;
 
-    const size_t CENTER = 0;
-    const size_t HEAD = 3;
-    const size_t RIGHT_HAND = 7;
-    const size_t LEFT_HAND = 11;
-    const size_t RIGHT_FOOT = 15;
-    const size_t LEFT_FOOT = 19;
 };
 
 

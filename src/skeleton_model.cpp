@@ -5,11 +5,11 @@
 
 using namespace std;
 
-skeleton_model::skeleton_model() { }
+skeleton_model::skeleton_model() {}
 
-skeleton_model::~skeleton_model(){}
+skeleton_model::~skeleton_model() {}
 
-void skeleton_model::set_flag(bool flag){
+void skeleton_model::set_flag(bool flag) {
     use_test_ = flag;
     if (use_test_) out_file_name = "rad_d1.t";
     else out_file_name = "rad_d1";
@@ -73,8 +73,7 @@ positions_of_frame skeleton_model::get_joint_pos_of_frame(ifstream & fin) {
     string a;
     for (int i = 0; i < 20; i++) {
         fin >> frame_id >> joint_id >> x >> y >> z;
-        //cout << frame_id << "  " << joint_id << "  " << x << "  " << y << "  " << z << endl;
-        result.push_back(position(x, y, z));
+        result[joint_id] = position(x, y, z);
     }
 
     return result;
