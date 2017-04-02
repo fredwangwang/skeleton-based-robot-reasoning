@@ -85,17 +85,10 @@ void RAD::calculate() {
         distances.resize(5);
         angles.resize(5);
 
-        double min_dist, max_dist, min_angle, max_angle;
         size_t num_frame = ins.size();
         for (positions_of_frame &frame: ins) {
             calculate_single_frame(frame);
         }
-        //cout << "computed for one instance" << endl;
-        //WriteOut(distances[0]);
-        // TODO: compute a hist of N (hyperparam) bins for each di
-        // TODO: compute a hist of M bins for each thetai
-        // TODO: Determine the upper and lower bound for hist, and bin size for hist
-        // Now assume N = 10, M = 9
 
         vector<vector<double >> Nbins = putting_N_bins(distances);
         vector<vector<double >> Mbins = putting_M_bins(angles);
@@ -117,29 +110,15 @@ void RAD::calculate() {
     }
 }
 
-// TODO: determine the bin size roughly
 vector<vector<double >> RAD::putting_N_bins(vector<vector<double>> &distances) {
-<<<<<<< HEAD
-    const static size_t num_bin = 10;
-    const static double bin_range[num_bin] = {.22,.44,.66,.88,1.1,1.32,1.54,1.76,1.98,2.2};
-=======
     const static size_t num_bin = 15;
     const static double bin_range[num_bin] = {0.3, 0.6, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.8, 2.0, 2.3, 5};
->>>>>>> 34fe54bdf44a66bf84c6e13814f9e3329f0b0e2b
-
-    static double min = 10000, max = 0;     // for debug
-
 
     vector<vector<double >> result;
 
     for (vector<double> &a: distances) {
         vector<double> Nbin(num_bin, 0);
         for (double &data: a) {
-            if (data > max)
-                max = data;
-            if (data < min)
-                min = data;
-
             for (int i = 0; i < num_bin; ++i) {
                 if (data < bin_range[i]) {
                     Nbin[i] += 1;
@@ -150,15 +129,13 @@ vector<vector<double >> RAD::putting_N_bins(vector<vector<double>> &distances) {
         result.push_back(Nbin);
     }
 
-//    cout << fixed << setprecision(2);
-//    cout << "Dista: min = " << min << "\tmax = " << max << endl;
-
     return result;
 }
 
 std::vector<std::vector<double >> RAD::putting_M_bins(std::vector<std::vector<double>> &angles) {
-    const static size_t num_bin = 9;
-    const static double bin_range[num_bin] = {20, 40, 60, 80, 100, 120, 140, 160, 180};
+    const static size_t num_bin = 18;
+    const static double bin_range[num_bin] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160,
+                                              170, 180};
 
     vector<vector<double>> result;
 

@@ -13,15 +13,6 @@
 
 using namespace std;
 
-// TO CREATE A STAR REPRESENTATION
-// THERE ARE 5 POINTS REQUIRED, THEY ARE:
-// CENTER:      1
-// HEAD:        4
-// RIGHT HAND:  8
-// LEFT HAND:   12
-// RIGHT FOOT:  16
-// LEFT FOOT:   20
-
 class RAD : public skeleton_model {
 public:
     RAD(bool flag);
@@ -40,6 +31,5 @@ private:
     std::vector<std::vector<double>> angles;
 
 };
-
 
 #endif //SKELETON_BASED_ROBOT_REASONING_RAD_H
