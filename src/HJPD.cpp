@@ -24,9 +24,9 @@ void HJPD::start() {
 }
 
 vector<double> putting_N_bins(vector<double> &data) {
-    const static size_t num_bin = 10;
-    const static double bin_range[num_bin] = {0.07, 2 * 0.07, 3 * 0.07, 4 * 0.07, 5 * 0.07, 6 * 0.07, 7 * 0.07,
-                                              8 * 0.07, 9 * 0.07, 0.7};
+    const static size_t num_bin = 20;
+    const static double bin_range[num_bin] = {-1.9, -1.7, -1.5, -1.3, -1.1, -0.9, -0.7, -0.5, -0.3, -0.1, 0.1,
+                                              0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 5};
 
     static double min = 10000, max = 0;     // for debug
 
@@ -46,8 +46,8 @@ vector<double> putting_N_bins(vector<double> &data) {
         }
     }
 
-    cout << fixed << setprecision(2);
-    cout << "Dista: min = " << min << "\tmax = " << max << endl;
+//    cout << fixed << setprecision(2);
+//    cout << "Dista: min = " << min << "\tmax = " << max << endl;
 
     return result;
 }

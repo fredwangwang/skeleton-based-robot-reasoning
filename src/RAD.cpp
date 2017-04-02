@@ -23,7 +23,7 @@ RAD::RAD(bool flag) {
 void RAD::start() {
     cout << "start calculating RAD" << endl;
     os_buff_.clear();
-    
+
     calculate();
     write_to_file();
 }
@@ -33,7 +33,7 @@ double angle(position &a, position &b) {
     double x_norm = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
     double y_norm = sqrt(pow(b.x, 2) + pow(b.y, 2) + pow(b.z, 2));
     double cos_theta = x_dot_y / (x_norm * y_norm);
-    return 180*acos(cos_theta)/3.14159265358;
+    return 180 * acos(cos_theta) / 3.14159265358;
 }
 
 
@@ -117,9 +117,8 @@ void RAD::calculate() {
 }
 
 vector<vector<double >> RAD::putting_N_bins(vector<vector<double>> &distances) {
-    const static size_t num_bin = 10;
-    const static double bin_range[num_bin] = {0.07, 2 * 0.07, 3 * 0.07, 4 * 0.07, 5 * 0.07, 6 * 0.07, 7 * 0.07,
-                                              8 * 0.07, 9 * 0.07, 0.7};
+    const static size_t num_bin = 15;
+    const static double bin_range[num_bin] = {0.3, 0.6, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.8, 2.0, 2.3, 5};
 
     static double min = 10000, max = 0;     // for debug
 
@@ -136,7 +135,7 @@ vector<vector<double >> RAD::putting_N_bins(vector<vector<double>> &distances) {
 
             for (int i = 0; i < num_bin; ++i) {
                 if (data < bin_range[i]) {
-                    Nbin[i]+=1;
+                    Nbin[i] += 1;
                     break;
                 }
             }
@@ -168,7 +167,7 @@ std::vector<std::vector<double >> RAD::putting_M_bins(std::vector<std::vector<do
 
             for (int i = 0; i < num_bin; ++i) {
                 if (data < bin_range[i]) {
-                    Nbin[i]+=1;
+                    Nbin[i] += 1;
                     break;
                 }
             }
