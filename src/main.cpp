@@ -12,13 +12,16 @@ bool useTest = false;
 
 void print_usage() {
     cout << "Usage:" << endl
-         << "program option model" << endl
+         << "program option model [SVM FORMAT]" << endl
          << "\tOption:" << endl
-         << "\t--test\tusing test dataset" << endl
-         << "\t--train\tusing train dataset" << endl
+         << "\ttest\tusing test dataset" << endl
+         << "\ttrain\tusing train dataset" << endl
          << "\tModel:" << endl
-         << "\t--rad\tusing RAD model" << endl
-         << "\t--hjpd\tusing HJPD model" << endl;
+         << "\trad\tusing RAD model" << endl
+         << "\thjpd\tusing HJPD model" << endl
+         << "\tSVM FORMAT: " << endl
+         << "\ttrue\toutput svm data format" << endl
+         << "\tfalse\toutput normal data format [default]" << endl;
 }
 
 int main(int argc, char **argv) {
@@ -39,18 +42,25 @@ int main(int argc, char **argv) {
         print_usage();
         exit(EXIT_FAILURE);
     };
+
     string m;
-    if (argc == 3) {
-        m = (argv[2]);
+    bool svm = false;
+    if (argc == 4) {
+        m = argv[3];
+        if (m.find("t") != string::npos || m.find("T") != string::npos)
+            svm = true;
     }
-    else {
+
+    if (argc >= 3) {
+        m = (argv[2]);
+    } else {
         cout << "Which model? (rad / hjpd): ";
         cin >> m;
     }
     if (m.find("rad") != string::npos || m.find("RAD") != string::npos)
-        model = new RAD(useTest);
+        model = new RAD(useTest, svm);
     else if (m.find("hjpd") != string::npos || m.find("HJPD") != string::npos)
-        model = new HJPD(useTest);
+        model = new HJPD(useTest, svm);
     else {
         cerr << "Unrecognized model " << argv[2] << endl;
         print_usage();

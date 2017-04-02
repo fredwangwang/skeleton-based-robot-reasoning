@@ -6,10 +6,6 @@
 
 using namespace std;
 
-skeleton_model::skeleton_model() {}
-
-skeleton_model::~skeleton_model() {}
-
 void skeleton_model::get_file_list() {
     string dir_str;
     DIR *dir = NULL;
@@ -35,8 +31,10 @@ void skeleton_model::get_file_list() {
 
 void skeleton_model::load_instances() {
     cout << "Load all files" << endl;
-    for (string &s : file_list_)
+    for (string &s : file_list_) {
+        instance_names.push_back(s);
         positions_instances.push_back(get_joint_pos_of_instance(s));
+    }
     cout << "Finish loading " << positions_instances.size() << " instances " << endl;
 }
 

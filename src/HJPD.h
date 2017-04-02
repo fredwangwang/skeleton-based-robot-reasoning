@@ -9,7 +9,7 @@
 
 class HJPD : public skeleton_model {
 public:
-    HJPD(bool flag);
+    HJPD(bool flag, bool svm);
 
     void start();
 

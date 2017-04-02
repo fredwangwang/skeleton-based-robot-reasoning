@@ -7,11 +7,16 @@
 
 using namespace std;
 
-HJPD::HJPD(bool flag) {
+HJPD::HJPD(bool flag, bool svm) {
     use_test_ = flag;
-    if (flag) out_file_name_ = "hjpd_d1.t";
-    else out_file_name_ = "hjpd_d1";
-
+    svm_output = svm;
+    if (flag) {
+        if (svm) out_file_name_ = "hjpd_d2.t";
+        else out_file_name_ = "hjpd_d1.t";
+    } else {
+        if (svm) out_file_name_ = "hjpd_d2";
+        else out_file_name_ = "hjpd_d1";
+    }
 
     get_file_list();
     load_instances();
@@ -24,10 +29,11 @@ void HJPD::start() {
 
 vector<double> putting_N_bins(vector<double> &data) {
 
-    const static size_t num_bin = 20;
-    const static double bin_range[num_bin] = {-1.9, -1.7, -1.5, -1.3, -1.1, -0.9, -0.7, -0.5, -0.3, -0.1, 0.1,
-                                              0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 5};
+    const static size_t num_bin = 13;
+    //const static double bin_range[num_bin] = {-1.9, -1.7, -1.5, -1.3, -1.1, -0.9, -0.7, -0.5, -0.3, -0.1, 0.1,
+    //                                         0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 5};
 
+    const static double bin_range[num_bin] = {-1.7, -1.3, -0.9, -0.5, -0.2, -0.1, 0.1, 0.2, 0.4, 0.8, 1.2, 1.6, 5};
     vector<double> result(num_bin, 0);
 
     for (double &d :data) {
@@ -54,7 +60,8 @@ vector<vector<double >> compute_hist_for_dim(vector<vector<double>> &rel_dist) {
  * In this method, I choose hip center as the center of the frame
  */
 void HJPD::calculate() {
-    for (positions_of_instance &ins: positions_instances) {
+    for (size_t i = 0; i < positions_instances.size(); i++) {
+        positions_of_instance &ins = positions_instances[i];
         relative_x_distances.clear();
         relative_y_distances.clear();
         relative_z_distances.clear();
@@ -73,20 +80,44 @@ void HJPD::calculate() {
         vector<vector<double>> hists_z = compute_hist_for_dim(relative_z_distances);
 
         // Normalize & format output
-        for (int i = 0; i < 20; i++) {
-            for (double &d : hists_x[i]) {
-                d /= num_frame;
-                os_buff_ << d << " ";
+
+        if (svm_output) {
+            int idx = 1;
+            string &filename = instance_names[i];
+            size_t pos_of_file = filename.find_last_of('/');
+            os_buff_ << filename.substr(pos_of_file + 2, 2) << " ";
+
+            for (int i = 0; i < 20; i++) {
+                for (double &d : hists_x[i]) {
+                    d /= num_frame;
+                    os_buff_ << idx++ << ":" << d << " ";
+                }
+                for (double &d : hists_y[i]) {
+                    d /= num_frame;
+                    os_buff_ << idx++ << ":" << d << " ";
+                }
+                for (double &d : hists_z[i]) {
+                    d /= num_frame;
+                    os_buff_ << idx++ << ":" << d << " ";
+                }
             }
-            for (double &d : hists_y[i]) {
-                d /= num_frame;
-                os_buff_ << d << " ";
-            }
-            for (double &d : hists_z[i]) {
-                d /= num_frame;
-                os_buff_ << d << " ";
+        } else {
+            for (int i = 0; i < 20; i++) {
+                for (double &d : hists_x[i]) {
+                    d /= num_frame;
+                    os_buff_ << d << " ";
+                }
+                for (double &d : hists_y[i]) {
+                    d /= num_frame;
+                    os_buff_ << d << " ";
+                }
+                for (double &d : hists_z[i]) {
+                    d /= num_frame;
+                    os_buff_ << d << " ";
+                }
             }
         }
+
         os_buff_ << endl;
     }
 }

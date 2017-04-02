@@ -8,10 +8,16 @@
 
 using namespace std;
 
-RAD::RAD(bool flag) {
+RAD::RAD(bool flag, bool svm) {
     use_test_ = flag;
-    if (flag) out_file_name_ = "rad_d1.t";
-    else out_file_name_ = "rad_d1";
+    svm_output = svm;
+    if (flag) {
+        if (svm) out_file_name_ = "rad_d2.t";
+        else out_file_name_ = "rad_d1.t";
+    } else {
+        if (svm) out_file_name_ = "rad_d2";
+        else out_file_name_ = "rad_d1";
+    }
 
     get_file_list();
     load_instances();
@@ -67,19 +73,10 @@ void RAD::calculate_single_frame(positions_of_frame &frame) {
     angles[4].push_back(relative_angle_respected_to_center(frame[FOOT_RIGHT], frame[HAND_RIGHT], frame[HIP_CENTER]));
 }
 
-void WriteOut(vector<double> &obj) {
-    ofstream fout("out.txt");
-    fout << fixed << setprecision(4);
-    for (double &f:obj)
-        fout << f << "\t";
-
-    fout << endl;
-    fout.close();
-}
-
 void RAD::calculate() {
-    // part pesudocode
-    for (positions_of_instance &ins:positions_instances) { // for each instance
+    //for (positions_of_instance &ins:positions_instances) { // for each instance
+    for (size_t i = 0; i < positions_instances.size(); i++) {
+        positions_of_instance &ins = positions_instances[i];
         distances.clear();
         angles.clear();
         distances.resize(5);
@@ -94,17 +91,35 @@ void RAD::calculate() {
         vector<vector<double >> Mbins = putting_M_bins(angles);
 
         // Normalize
-        for (vector<double> &oneBin: Nbins)
-            for (double &one: oneBin) {
-                one /= num_frame;
-                os_buff_ << one << " ";
-            }
+        if (svm_output) {
+            int idx = 1;
+            string &filename = instance_names[i];
+            size_t pos_of_file = filename.find_last_of('/');
+            os_buff_ << filename.substr(pos_of_file + 2, 2) << " ";
+            for (vector<double> &oneBin: Nbins)
+                for (double &one: oneBin) {
+                    one /= num_frame;
+                    os_buff_ << idx++ << ":" << one << " ";
+                }
+            for (vector<double> &oneBin: Mbins)
+                for (double &one: oneBin) {
+                    one /= num_frame;
+                    os_buff_ << idx++ << ":" << one << " ";
+                }
+        } else {
+            for (vector<double> &oneBin: Nbins)
+                for (double &one: oneBin) {
+                    one /= num_frame;
+                    os_buff_ << one << " ";
+                }
 
-        for (vector<double> &oneBin: Mbins)
-            for (double &one: oneBin) {
-                one /= num_frame;
-                os_buff_ << one << " ";
-            }
+
+            for (vector<double> &oneBin: Mbins)
+                for (double &one: oneBin) {
+                    one /= num_frame;
+                    os_buff_ << one << " ";
+                }
+        }
 
         os_buff_ << endl;
     }

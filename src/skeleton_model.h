@@ -39,9 +39,9 @@ typedef vector<positions_of_frame> positions_of_instance;
 
 class skeleton_model {
 public:
-    skeleton_model();
+    skeleton_model() {};
 
-    ~skeleton_model();
+    ~skeleton_model() {};
 
     virtual void start() = 0;
 
@@ -58,9 +58,11 @@ protected:
     const char *trainFolder_ = "dataset/train/";
 
     bool use_test_;
+    bool svm_output;
     string out_file_name_;
     vector<string> file_list_;
     vector<positions_of_instance> positions_instances;
+    vector<string> instance_names;
     ostringstream os_buff_;
 
     const size_t HIP_CENTER = 1;
@@ -83,6 +85,7 @@ protected:
     const size_t KNEE_RIGHT = 18;
     const size_t ANKLE_RIGHT = 19;
     const size_t FOOT_RIGHT = 20;
+
 private:
     positions_of_instance get_joint_pos_of_instance(string &filename);
 

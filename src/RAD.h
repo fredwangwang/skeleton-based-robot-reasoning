@@ -15,7 +15,7 @@ using namespace std;
 
 class RAD : public skeleton_model {
 public:
-    RAD(bool flag);
+    RAD(bool flag, bool svm);
 
     void start();
 
