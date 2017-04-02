@@ -1,6 +1,7 @@
 #include "skeleton_model.h"
 #include <dirent.h>
 #include <iostream>
+#include <cmath>
 #include <algorithm>
 
 using namespace std;

@@ -119,8 +119,13 @@ void RAD::calculate() {
 
 // TODO: determine the bin size roughly
 vector<vector<double >> RAD::putting_N_bins(vector<vector<double>> &distances) {
+<<<<<<< HEAD
     const static size_t num_bin = 10;
     const static double bin_range[num_bin] = {.22,.44,.66,.88,1.1,1.32,1.54,1.76,1.98,2.2};
+=======
+    const static size_t num_bin = 15;
+    const static double bin_range[num_bin] = {0.3, 0.6, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.8, 2.0, 2.3, 5};
+>>>>>>> 34fe54bdf44a66bf84c6e13814f9e3329f0b0e2b
 
     static double min = 10000, max = 0;     // for debug
 
