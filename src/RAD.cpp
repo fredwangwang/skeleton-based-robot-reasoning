@@ -13,9 +13,6 @@ RAD::RAD(bool flag) {
     if (flag) out_file_name_ = "rad_d1.t";
     else out_file_name_ = "rad_d1";
 
-    distances.resize(5);
-    angles.resize(5);
-
     get_file_list();
     load_instances();
 }
@@ -23,7 +20,7 @@ RAD::RAD(bool flag) {
 void RAD::start() {
     cout << "start calculating RAD" << endl;
     os_buff_.clear();
-    
+
     calculate();
     write_to_file();
 }
@@ -33,14 +30,19 @@ double angle(position &a, position &b) {
     double x_norm = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
     double y_norm = sqrt(pow(b.x, 2) + pow(b.y, 2) + pow(b.z, 2));
     double cos_theta = x_dot_y / (x_norm * y_norm);
-    return 180*acos(cos_theta)/3.14159265358;
+    return 180 * acos(cos_theta) / 3.14159265358;
 }
 
-
 double relative_angle_respected_to_center(position &a, position &b, position &center) {
-    double angle_a_to_center = angle(a, center);
-    double angle_b_to_center = angle(b, center);
-    return abs(angle_a_to_center - angle_b_to_center);
+    position a_to_center, b_to_center;
+    a_to_center.x = a.x - center.x;
+    a_to_center.y = a.y - center.y;
+    a_to_center.z = a.z - center.z;
+    b_to_center.x = b.x - center.x;
+    b_to_center.y = b.y - center.y;
+    b_to_center.z = b.z - center.z;
+
+    return angle(a_to_center, b_to_center);
 }
 
 /**
@@ -95,7 +97,6 @@ void RAD::calculate() {
         // TODO: Determine the upper and lower bound for hist, and bin size for hist
         // Now assume N = 10, M = 9
 
-
         vector<vector<double >> Nbins = putting_N_bins(distances);
         vector<vector<double >> Mbins = putting_M_bins(angles);
 
@@ -116,10 +117,10 @@ void RAD::calculate() {
     }
 }
 
+// TODO: determine the bin size roughly
 vector<vector<double >> RAD::putting_N_bins(vector<vector<double>> &distances) {
     const static size_t num_bin = 10;
-    const static double bin_range[num_bin] = {0.07, 2 * 0.07, 3 * 0.07, 4 * 0.07, 5 * 0.07, 6 * 0.07, 7 * 0.07,
-                                              8 * 0.07, 9 * 0.07, 0.7};
+    const static double bin_range[num_bin] = {.22,.44,.66,.88,1.1,1.32,1.54,1.76,1.98,2.2};
 
     static double min = 10000, max = 0;     // for debug
 
@@ -136,7 +137,7 @@ vector<vector<double >> RAD::putting_N_bins(vector<vector<double>> &distances) {
 
             for (int i = 0; i < num_bin; ++i) {
                 if (data < bin_range[i]) {
-                    Nbin[i]+=1;
+                    Nbin[i] += 1;
                     break;
                 }
             }
@@ -144,41 +145,30 @@ vector<vector<double >> RAD::putting_N_bins(vector<vector<double>> &distances) {
         result.push_back(Nbin);
     }
 
-    cout << fixed << setprecision(2);
-    cout << result.size() << endl;
-    cout << "Dista: min = " << min << "\tmax = " << max << endl;
+//    cout << fixed << setprecision(2);
+//    cout << "Dista: min = " << min << "\tmax = " << max << endl;
 
     return result;
 }
 
 std::vector<std::vector<double >> RAD::putting_M_bins(std::vector<std::vector<double>> &angles) {
     const static size_t num_bin = 9;
-    const static double bin_range[num_bin] = {10, 20, 30, 40, 50, 60, 70, 80, 90};
+    const static double bin_range[num_bin] = {20, 40, 60, 80, 100, 120, 140, 160, 180};
 
-    static double min = 10000, max = 0;     // for debug
+    vector<vector<double>> result;
 
-    vector<vector<double >> result;
     for (vector<double> &a: angles) {
         vector<double> Nbin(num_bin, 0);
         for (double &data: a) {
-            if (data > max)
-                max = data;
-            if (data < min)
-                min = data;
-
             for (int i = 0; i < num_bin; ++i) {
                 if (data < bin_range[i]) {
-                    Nbin[i]+=1;
+                    Nbin[i] += 1;
                     break;
                 }
             }
         }
         result.push_back(Nbin);
     }
-
-    cout << fixed << setprecision(2);
-    cout << result.size() << endl;
-    cout << "Angle: min = " << min << "\tmax = " << max << endl;
 
     return result;
 }

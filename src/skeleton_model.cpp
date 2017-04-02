@@ -42,7 +42,7 @@ void skeleton_model::load_instances() {
 void skeleton_model::write_to_file() {
     ofstream fout(out_file_name_);
     if (!fout) {
-        cerr << "What?" << endl;
+        cerr << "Something wrong happened. Cannot write to file " << out_file_name_ << endl;
         exit(EXIT_FAILURE);
     }
     fout << os_buff_.str();
@@ -73,7 +73,7 @@ positions_of_instance skeleton_model::get_joint_pos_of_instance(string &filename
 }
 
 // This method assumes that there are 20 joints per frame
-// PRETTY BAD ASSUMPTION, BUT IT WORKS...
+// PRETTY UGLY ASSUMPTION, BUT IT WORKS...
 positions_of_frame skeleton_model::get_joint_pos_of_frame(ifstream &fin) {
     positions_of_frame result;
     int frame_id, joint_id;
@@ -83,6 +83,5 @@ positions_of_frame skeleton_model::get_joint_pos_of_frame(ifstream &fin) {
         fin >> frame_id >> joint_id >> x >> y >> z;
         result[joint_id] = position(x, y, z);
     }
-
     return result;
 }

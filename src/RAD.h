@@ -14,13 +14,13 @@
 using namespace std;
 
 // TO CREATE A STAR REPRESENTATION
-// THERE ARE 5 POINTS REQUIRED, THEY ARE (OFF BY ONE MODIFIED):
-// CENTER:      0
-// HEAD:        3
-// RIGHT HAND:  7
-// LEFT HAND:   11
-// RIGHT FOOT:  15
-// LEFT FOOT:   19
+// THERE ARE 5 POINTS REQUIRED, THEY ARE:
+// CENTER:      1
+// HEAD:        4
+// RIGHT HAND:  8
+// LEFT HAND:   12
+// RIGHT FOOT:  16
+// LEFT FOOT:   20
 
 class RAD : public skeleton_model {
 public:

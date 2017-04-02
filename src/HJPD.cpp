@@ -23,21 +23,14 @@ void HJPD::start() {
     write_to_file();
 }
 
+// TODO: determin bin size
 vector<double> putting_N_bins(vector<double> &data) {
     const static size_t num_bin = 10;
-    const static double bin_range[num_bin] = {0.07, 2 * 0.07, 3 * 0.07, 4 * 0.07, 5 * 0.07, 6 * 0.07, 7 * 0.07,
-                                              8 * 0.07, 9 * 0.07, 0.7};
-
-    static double min = 10000, max = 0;     // for debug
+    const static double bin_range[num_bin] = {-1.00, -0.69, -0.38, 0.24, 0.55, 0.86, 1.17, 1.48, 1.79, 2.1};
 
     vector<double> result(num_bin, 0);
 
     for (double &d :data) {
-        if (d > max)
-            max = d;
-        if (d < min)
-            min = d;
-
         for (int i = 0; i < num_bin; ++i) {
             if (d < bin_range[i]) {
                 result[i] += 1;
@@ -45,9 +38,6 @@ vector<double> putting_N_bins(vector<double> &data) {
             }
         }
     }
-
-    cout << fixed << setprecision(2);
-    cout << "Dista: min = " << min << "\tmax = " << max << endl;
 
     return result;
 }
